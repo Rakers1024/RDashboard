@@ -6,7 +6,7 @@ import VueMarkdown from 'vite-plugin-md'
 import VueI18n from '@intlify/unplugin-vue-i18n/vite'
 // import { visualizer } from 'rollup-plugin-visualizer'
 
-let base = '/nav'
+let base = './'
 if (process.env.VITE_APP_BUILD_MODE === 'crx') base = './'
 if (process.env.VITE_APP_BUILD_MODE === 'cdn') base = 'https://cdn.kongfandong.cn/howdz/dist/'
 
