@@ -169,6 +169,7 @@ const updateBackground = async () => {
       } else {
         let target = val
         if (import.meta.env.DEV) target = target.replace('https://kongfandong.cn', '') // For Dev Proxy
+        target = target.replace('https://kongfandong.cn', '') // For Dev Proxy
         // Unsplash优先使用直连获取
         if (target.includes('keyword=') && directToUnsplash) {
           try {
