@@ -9,6 +9,8 @@ export default async (options: {
   timeout?: number,
   return?: 'response' | 'json' | 'text'
 }) => {
+  options.url = options.url.replace('/api/randomPhoto', '/tapi/randomPhoto')
+  options.url = options.url.replace('/api/', '/tapi/api/')
   const method = options.method || 'get'
 
   const requestInit: RequestInit = { method }

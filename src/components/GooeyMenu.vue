@@ -7,6 +7,16 @@
       <span class="hamburger hamburger-2" />
       <span class="hamburger hamburger-3" />
     </label>
+    <el-tooltip effect="dark" :content="$t('保存配置') + `(Alt+S)`" placement="top">
+      <div class="menu-item" @click="handleSaveConfig">
+        <Icon name="save" />
+      </div>
+    </el-tooltip>
+    <el-tooltip effect="dark" :content="$t('拉取配置') + `(Alt+P)`" placement="top">
+      <div class="menu-item" @click="handlePullConfig">
+        <Icon name="refresh" />
+      </div>
+    </el-tooltip>
     <el-tooltip effect="dark" :content="$t('辅助功能') + `(Alt+X)`" placement="top">
       <div class="menu-item" @click="handleShowAuxiliaryConfig">
         <Icon name="tools" />
@@ -70,8 +80,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, onUnmounted } from 'vue'
+import { computed, defineAsyncComponent, defineComponent, onMounted, onUnmounted, ref } from 'vue'
 import { useStore } from '@/store'
+import request from '@/utils/request'
+import { ElNotification } from 'element-plus'
 export default defineComponent({
   name: 'GooetMenu',
   emits: ['addComponent', 'showGlobalConfig', 'showAuxiliaryConfig'],
@@ -138,13 +150,80 @@ export default defineComponent({
       },
       handleShowAuxiliaryConfig() {
         emit('showAuxiliaryConfig')
+      },
+      async handleSaveConfig() {
+      try {
+        const {
+          list,
+          affix,
+          global,
+          showBackgroundEffect,
+          showRefreshBtn,
+          tabList,
+          showTabSwitchBtn,
+          enableKeydownSwitchTab,
+          backgroundEffectActive
+        } = store
+        const dataToString = JSON.stringify(
+          {
+            list,
+            affix,
+            global,
+            showBackgroundEffect,
+            showRefreshBtn,
+            tabList,
+            showTabSwitchBtn,
+            enableKeydownSwitchTab,
+            backgroundEffectActive
+          },
+          null,
+          0
+        )
+        console.log("🚀 ~ dataToString:", dataToString)
+        const res = await request({url:'/tapi/saveData',method:'post', data:{data:dataToString}, headers:{'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+        console.log("🚀 ~ handleSaveConfig ~ res:", res)
+        if(res.success === true){
+          ElNotification({
+            title: '提示',
+            type: 'success',
+            message: '配置保存成功!'
+          })
+        }else{
+          ElNotification({
+            title: '配置保存错误',
+            type: 'error',
+            message: res.errorMessage
+          })
+          if(res.errorCode == 401){
+            location.href = '/'
+          }
+        }
+      } catch (e) {
+        console.error(e)
       }
+      },
+      async handlePullConfig() {
+        const res = await request({url:'/tapi/getData', headers:{'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+        console.log("🚀 ~ handlePullConfig ~ res:", res)
+        if(res.success === true){
+          store.updateConfigByData(res.data)
+        }else{
+          if(res.errorCode == 401){
+            location.href = '/'
+          }
+          ElNotification({
+            title: '配置拉取错误',
+            type: 'error',
+            message: res.errorMessage
+          })
+        }
+      },
     }
   }
 })
 </script>
 <style lang="scss" scoped>
-$menu-items: 4;
+$menu-items: 6;
 %goo {
   filter: url('#shadowed-goo');
 }

@@ -1,6 +1,7 @@
 import { createPinia, defineStore } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { getSupportFontFamilyList } from '@/utils/font'
+import { ElNotification } from 'element-plus'
 
 export default createPinia().use(piniaPluginPersistedstate)
 
@@ -11,7 +12,7 @@ const updateLocalGlobal = (global: any) => storageCtx.setItem('global', JSON.str
 // It need reset default global background w & h when use random image.
 const getLocalGlobal = () => {
   const global = JSON.parse(storageCtx.getItem('global') || '{}')
-  if (global.background && global.background.includes('/api/randomPhoto')) {
+  if (global.background && global.background.includes('api/randomPhoto')) {
     const w = window.innerWidth
     const h = window.innerHeight
     global.background = global.background.replace(/w=(\d*)/, `w=${w}`).replace(/h=(\d*)/, `h=${h}`)
@@ -82,6 +83,60 @@ export const useStore = defineStore({
     }
   },
   actions: {
+    updateConfigByData(data:any, showSuccessTips = true) {
+      try {
+        const config = data
+        if (
+          (!config.list || config.list.length === 0) &&
+          (!config.affix || config.affix.length === 0)
+        ) {
+          console.error(config)
+          ElNotification({
+            title: '提示',
+            type: 'error',
+            message: '同步配置失败！'
+          })
+        } else {
+          console.log('同步配置成功！', config)
+          // 更新配置
+          const {
+            list,
+            affix,
+            showBackgroundEffect,
+            showRefreshBtn,
+            tabList,
+            showTabSwitchBtn,
+            enableKeydownSwitchTab,
+            backgroundEffectActive
+          } = config
+          this.updateStates([
+            { key: 'tabList', value: tabList },
+            { key: 'list', value: list },
+            { key: 'affix', value: affix },
+            { key: 'showBackgroundEffect', value: showBackgroundEffect },
+            { key: 'showRefreshBtn', value: showRefreshBtn },
+            { key: 'showTabSwitchBtn', value: showTabSwitchBtn },
+            { key: 'enableKeydownSwitchTab', value: enableKeydownSwitchTab },
+            { key: 'backgroundEffectActive', value: backgroundEffectActive }
+          ])
+          if (showSuccessTips) {
+            ElNotification({
+              title: '提示',
+              type: 'success',
+              message: '同步配置成功！'
+            })
+          }
+        }
+      } catch (e) {
+        console.error(e)
+        console.error(data)
+        ElNotification({
+          title: '提示',
+          type: 'error',
+          message: '同步配置失败！'
+        })
+      }
+  },
     updateIsLock(value: boolean) {
       this.isLock = value
     },
