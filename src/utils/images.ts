@@ -83,7 +83,7 @@ export function getTransparentIcon(url: string): Promise<string> {
 }
 
 export function getTargetIcon(target: string, type: 'redirect' | 'source' = 'redirect', disabledCache = false) {
-  let result = `${apiURL}/api/icon?url=${encodeURIComponent(target.replace(/http(s)?:\/\//, ''))}`
+  let result = `${apiURL}/tapi/api/icon?url=${encodeURIComponent(target.replace(/http(s)?:\/\//, ''))}`
   if (type === 'source') {
     result += '&type=source'
   }
@@ -94,7 +94,7 @@ export function getTargetIcon(target: string, type: 'redirect' | 'source' = 'red
 }
 
 export async function getTargetIconLink(target: string, disabledCache = false) {
-  let result = `${apiURL}/api/icon?url=${encodeURIComponent(target.replace(/http(s)?:\/\//, ''))}`
+  let result = `${apiURL}/tapi/api/icon?url=${encodeURIComponent(target.replace(/http(s)?:\/\//, ''))}`
   if (disabledCache) {
     result += '&disabledCache=1'
   }
@@ -105,7 +105,7 @@ export async function getTargetIconLink(target: string, disabledCache = false) {
 }
 
 export function getTargetIconV2(target: string) {
-  return `${apiURL}/api/icon/v2?url=${encodeURIComponent(target.replace(/http(s)?:\/\//, ''))}`
+  return `${apiURL}/tapi/api/icon/v2?url=${encodeURIComponent(target.replace(/http(s)?:\/\//, ''))}`
 }
 
 export function cutImageBase64(file: File, wid: number, quality = 1) {
