@@ -179,9 +179,7 @@ export default defineComponent({
           null,
           0
         )
-        console.log("🚀 ~ dataToString:", dataToString)
         const res = await request({url:'/tapi/saveData',method:'post', data:{data:dataToString}, headers:{'Authorization': 'Bearer ' + localStorage.getItem('token')}})
-        console.log("🚀 ~ handleSaveConfig ~ res:", res)
         if(res.success === true){
           ElNotification({
             title: '提示',
@@ -204,7 +202,6 @@ export default defineComponent({
       },
       async handlePullConfig() {
         const res = await request({url:'/tapi/getData', headers:{'Authorization': 'Bearer ' + localStorage.getItem('token')}})
-        console.log("🚀 ~ handlePullConfig ~ res:", res)
         if(res.success === true){
           store.updateConfigByData(res.data)
         }else{
