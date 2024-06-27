@@ -347,15 +347,15 @@ export default defineComponent({
           break
         case 4:
           if (randomSource.value === 'sina') {
-            output = `#242428 url(https://kongfandong.cn/api/randomPhoto/sina?duration=${duration.value}) center center / cover`
+            output = `#242428 url(/api/tapi/api/randomPhoto/sina?duration=${duration.value}) center center / cover`
           } else if (randomSource.value === 'bing') {
-            output = `#242428 url(https://kongfandong.cn/api/randomPhoto/bing?duration=${duration.value}) center center / cover`
+            output = `#242428 url(/api/tapi/api/randomPhoto/bing?duration=${duration.value}) center center / cover`
           } else if (randomSource.value === 'personal') {
-            output = `#242428 url(https://kongfandong.cn/api/randomPhoto/personal?duration=${duration.value}) center center / cover`
+            output = `#242428 url(/api/tapi/api/randomPhoto/personal?duration=${duration.value}) center center / cover`
           } else {
             const keyword = imgType.value === 'Custom' ? customImgType.value : imgType.value
             const mirrorStr = mirror.value ? '&type=mirror' : ''
-            output = `#242428 url(https://kongfandong.cn/api/randomPhoto?keyword=${keyword}&w=${w.value}&h=${h.value}${mirrorStr}&duration=${duration.value}) center center / cover`
+            output = `#242428 url(/api/tapi/api/randomPhoto?keyword=${keyword}&w=${w.value}&h=${h.value}${mirrorStr}&duration=${duration.value}) center center / cover`
           }
           break
         case 5:
